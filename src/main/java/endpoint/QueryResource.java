@@ -1,5 +1,7 @@
 package endpoint;
 
+import com.google.gson.Gson;
+import jdbc.Pcap;
 import jdbc.Query;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +12,8 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jamescross91 on 05/11/2015.
@@ -29,24 +33,20 @@ public class QueryResource extends ServerResource {
             return errorRepresentation("SQL parameter not supplied");
         }
 
-        Query.execute(json.getString("sql"), resultSet -> {
-            while(resultSet.next()) {
-                float time = resultSet.getFloat("time");
-                String da = resultSet.getString("da");
-                String da_resolved = resultSet.getString("da_resolved");
-                String ta = resultSet.getString("ta");
-                String ta_resolved = resultSet.getString("ta_resolved");
-                String ra = resultSet.getString("ra");
-                String ra_resolved = resultSet.getString("ra_resolved");
-                String signal_dbm = resultSet.getString("signal_dbm");
-                String signal_percent = resultSet.getString("signal_percent");
-                String node_id = resultSet.getString("node_id");
-                String project_tag = resultSet.getString("project_tag");
+        List<Pcap> list = Query.execute(json.getString("sql"), resultSet -> {
+            ArrayList<Pcap> pcapList = new ArrayList<Pcap>();
+            while (resultSet.next()) {
+                Pcap pcap = new Pcap();
+                pcap.init(resultSet);
+                pcapList.add(pcap);
             }
-            return null;
+
+            return pcapList;
         });
 
-        return errorRepresentation("oops");
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(list);
+        return new JsonRepresentation(jsonString);
     }
 
     private JsonRepresentation errorRepresentation(String errMessage) {
