@@ -14,7 +14,7 @@ public class Bootstrap {
     public static void main(String args[]) {
         Component component = new Component();
         component.getLogService().setLoggerName("net.asdf.WebComponent.www");
-        component.getDefaultHost().attach("/api", new SQLApplication());
+        component.getDefaultHost().attach("", new SQLApplication());
 
         // Attach the server connectors descriptors to the component
         component.getServers().add(startHttpServer(component, 2511));

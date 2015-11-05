@@ -21,7 +21,7 @@ public class SQLApplication extends Application {
         corsFilter.setAllowedOrigins(allowedOrigins);
 
         //SQL query endpoint
-        router.attach("query", QueryResource.class);
+        router.attach("/query", QueryResource.class);
 
         return corsFilter;
     }
