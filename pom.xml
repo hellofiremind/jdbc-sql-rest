@@ -91,7 +91,13 @@
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>redshift</groupId>
+            <artifactId>com.amazon</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/RedshiftJDBC41-1.1.7.1007.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
